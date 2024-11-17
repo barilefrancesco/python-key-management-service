@@ -1,23 +1,70 @@
-# Installation
-```
+
+# Key Management Service
+
+A FastAPI application for managing API keys.
+
+## Installation
+
+To build and run the service using Docker, follow these steps:
+
+```bash
 docker build -t key-management-service .
 docker run -p 8000:8000 key-management-service
 ```
+The service will be available at `http://localhost:8000`
 
-# Create key
-```
+## Endpoints and Usage
+
+### Create a Key
+Use the following command to create a new API key:
+```bash
 curl -X POST \
  http://localhost:8000/api/keys \
  -H "Content-Type: application/json" \
- -d '{"name": "test-key-1"}' | json_pp
+ -d '{"name": "test-key-1", "expires_at": "2024-12-31T23:59:59Z"}' | json_pp
 ```
 
-# Keys list
-```
+### List All Keys
+Retrieve a list of all API keys using the command below:
+```bash
 curl http://localhost:8000/api/keys | json_pp
 ```
+**Optional Query Parameter:**
 
-# Get Key
-```
+-   `name`: Filter keys by name.
+
+### Get a Key by Name
+
+Retrieve an API key by name using the following command:
+```bash
 curl http://localhost:8000/api/keys?name=test-key-1 | json_pp
 ```
+
+### Delete a Key
+
+To delete a specific API key by its ID:
+```bash
+curl -X DELETE http://localhost:8000/api/keys/1 | json_pp
+```
+
+## Development
+
+### Environment Variables
+
+-   `DATABASE_URL`: Database connection URL (e.g., `sqlite:///./test.db`).
+
+### Dependencies
+
+-   **FastAPI:** The main framework.
+-   **SQLAlchemy:** ORM for database management.
+-   **Uvicorn:** ASGI server to run the application.
+
+To modify or extend the service, edit the files in the `app/` directory.
+
+## License
+
+This project is licensed under the MIT License.
+
+
+
+If you need further modifications or additions, let me know! 😊
