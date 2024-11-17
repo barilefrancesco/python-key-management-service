@@ -16,3 +16,8 @@ curl -X POST \
 ```
 curl http://localhost:8000/api/keys | json_pp
 ```
+
+# Get Key
+```
+curl http://localhost:8000/api/keys?name=test-key-1 | json_pp
+```
