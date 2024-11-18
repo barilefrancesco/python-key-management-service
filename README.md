@@ -64,7 +64,3 @@ To modify or extend the service, edit the files in the `app/` directory.
 ## License
 
 This project is licensed under the MIT License.
-
-
-
-If you need further modifications or additions, let me know! 😊
