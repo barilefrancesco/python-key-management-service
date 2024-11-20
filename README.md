@@ -5,8 +5,13 @@ A FastAPI application for managing API keys.
 
 ## Installation
 
-To build and run the service using Docker, follow these steps:
+1. Create `.env` file with `SEC_API_KEY` variable
+Generate key:
+```bash
+openssl rand -hex 32
+```
 
+2. To build and run the service using Docker, follow these steps:
 ```bash
 docker build -t key-management-service .
 docker run -p 8000:8000 key-management-service
