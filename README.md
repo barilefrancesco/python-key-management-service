@@ -19,15 +19,18 @@ The service will be available at `http://localhost:8000`
 Use the following command to create a new API key:
 ```bash
 curl -X POST \
- http://localhost:8000/api/keys \
- -H "Content-Type: application/json" \
- -d '{"name": "test-key-1", "expires_at": "2024-12-31T23:59:59Z"}' | json_pp
+  http://localhost:8000/api/keys \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-secure-api-key" \
+  -d '{"name": "test-key-1", "expires_at": "2024-12-31T23:59:59Z"}' | json_pp
 ```
 
 ### List All Keys
 Retrieve a list of all API keys using the command below:
 ```bash
-curl http://localhost:8000/api/keys | json_pp
+curl -X GET \
+  http://localhost:8000/api/keys \
+  -H "X-API-Key: your-secure-api-key" | json_pp
 ```
 **Optional Query Parameter:**
 
@@ -37,14 +40,18 @@ curl http://localhost:8000/api/keys | json_pp
 
 Retrieve an API key by name using the following command:
 ```bash
-curl http://localhost:8000/api/keys?name=test-key-1 | json_pp
+curl -X GET \
+  http://localhost:8000/api/keys/name/test-key-1 \
+  -H "X-API-Key: your-secure-api-key" | json_pp
 ```
 
 ### Delete a Key
 
 To delete a specific API key by its ID:
 ```bash
-curl -X DELETE http://localhost:8000/api/keys/1 | json_pp
+curl -X DELETE \
+  http://localhost:8000/api/keys/1 \
+  -H "X-API-Key: your-secure-api-key" | json_pp
 ```
 
 ## Development
