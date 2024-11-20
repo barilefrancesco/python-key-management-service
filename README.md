@@ -5,8 +5,7 @@ A FastAPI application for managing API keys.
 
 ## Installation
 
-1. Create `.env` file with `SEC_API_KEY` variable
-Generate key:
+1. Create `.env` file with `SEC_API_KEY` variable. Generate key with this terminal command:
 ```bash
 openssl rand -hex 32
 ```
