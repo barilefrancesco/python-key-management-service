@@ -15,6 +15,11 @@ openssl rand -hex 32
 docker build -t key-management-service .
 docker run -p 8000:8000 key-management-service
 ```
+or with docker-compose:
+```bash
+docker compose up --build -d
+```
+
 The service will be available at `http://localhost:8000`
 
 ## Endpoints and Usage
