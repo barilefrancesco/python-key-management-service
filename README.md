@@ -29,25 +29,17 @@ curl -X POST \
   -d '{"name": "test-key-1", "expires_at": "2024-12-31T23:59:59Z"}' | json_pp
 ```
 
-### List All Keys
+### Get a Key by Name
 Retrieve a list of all API keys using the command below:
 ```bash
 curl -X GET \
-  http://localhost:8000/api/keys \
+  http://localhost:8000/api/keys?name=test-key-1 \
   -H "X-API-Key: your-secure-api-key" | json_pp
 ```
 **Optional Query Parameter:**
 
 -   `name`: Filter keys by name.
 
-### Get a Key by Name
-
-Retrieve an API key by name using the following command:
-```bash
-curl -X GET \
-  http://localhost:8000/api/keys/name/test-key-1 \
-  -H "X-API-Key: your-secure-api-key" | json_pp
-```
 
 ### Delete a Key
 
