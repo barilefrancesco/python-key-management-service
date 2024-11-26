@@ -7,6 +7,8 @@ services:
       - "8000:8000"
     volumes:
       - ./data:/kms/data
+    environment:
+      - CRON_ENABLED=true
 
 volumes:
   data:

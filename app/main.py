@@ -45,7 +45,7 @@ async def log_requests(request: Request, call_next):
 
     response = await call_next(request)
 
-    log_message = f"API Key: {api_key}, Endpoint: {endpoint}, Method: {method}, IP Address: {ip_address}, Timestamp: {timestamp}"
+    log_message = f"Endpoint: {endpoint}, Method: {method}, IP Address: {ip_address}, Timestamp: {timestamp}"
     logging.info(log_message)
 
     return response
