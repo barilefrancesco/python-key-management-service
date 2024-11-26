@@ -8,6 +8,10 @@ import secrets
 from dotenv import load_dotenv
 import logging
 
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from base64 import b64encode
+
 load_dotenv()  # Load environment variables from .env file
 
 from app.models import Base, APIKey
@@ -37,7 +41,7 @@ async def log_requests(request: Request, call_next):
     print(f"logging request: {request.url}")
 
 
-    api_key = request.headers.get("X-API-Key")
+    # api_key = request.headers.get("X-API-Key")
     endpoint = request.url.path
     method = request.method
     ip_address = request.client.host
@@ -97,10 +101,14 @@ async def check_delete_auth(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/api/keys/create", response_model=APIKeyResponse, dependencies=[Depends(check_create_auth)])
 def create_api_key(key_data: APIKeyCreate, db: Session = Depends(get_db)):
-    """Create a new API key"""
+    """Create a new AES-256 API key """
+    backend = default_backend()
+    aes256_key = os.urandom(32)  # Generate a 256-bit (32-byte) key
+    encoded_key = b64encode(aes256_key).decode('utf-8')  # Encode the key in base64
+
     api_key = APIKey(
         name=key_data.name,
-        key=secrets.token_urlsafe(32),
+        key=encoded_key,
         created_at=datetime.utcnow(),
         expires_at=key_data.expires_at
     )
