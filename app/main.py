@@ -118,12 +118,12 @@ def create_api_key(key_data: APIKeyCreate, db: Session = Depends(get_db)):
     return api_key.to_dict()
 
 @app.get("/api/keys", response_model=List[APIKeyResponse], dependencies=[Depends(check_get_auth)])
-def get_api_key(name: str = Query(None, description="Filter keys by name"), db: Session = Depends(get_db)):
-    """List all API keys with optional name filter"""    
+def get_api_key(name: List[str] = Query(None, description="Filter keys by names"), db: Session = Depends(get_db)):
+    """List all API keys with optional name filter"""
     if name:
-        return [key.to_dict() for key in db.query(APIKey).filter(APIKey.name == name).all()]
+        return [key.to_dict() for key in db.query(APIKey).filter(APIKey.name.in_(name)).all()]
     else:
-        raise HTTPException(status_code=401, detail="You need to provide a name to filter the keys")
+        raise HTTPException(status_code=400, detail="You need to provide at least one name to filter the keys")
 
 @app.get("/api/keys/by-id/{key_id}", response_model=APIKeyResponse, dependencies=[Depends(check_get_auth)])
 def get_by_id_api_key(key_id: int, db: Session = Depends(get_db)):

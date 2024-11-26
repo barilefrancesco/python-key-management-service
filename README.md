@@ -41,6 +41,12 @@ curl -X GET \
   http://localhost:8000/api/keys?name=test-key-1 \
   -H "X-API-Key: your-secure-api-key" | json_pp
 ```
+or multiple names:
+```bash
+curl -X GET "http://localhost:8000/api/keys?name=test-key-1&name=test-key-2" \
+-H "X-API-Key: your-secure-api-key" | json_pp
+```
+
 **Optional Query Parameter:**
 
 -   `name`: Filter keys by name.
