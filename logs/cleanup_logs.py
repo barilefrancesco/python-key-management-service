@@ -2,18 +2,33 @@ import os
 import glob
 from datetime import datetime, timedelta
 
-LOG_DIR = '/code'
+LOG_DIR = '/kms/data'
+LOG_FILE = os.path.join(LOG_DIR, 'app.log')
+
+def parse_log_timestamp(line):
+    try:
+        timestamp_str = line.split(' - ')[0]
+        return datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S,%f')
+    except ValueError:
+        return None
 
 def cleanup_logs():
     cutoff_date = datetime.now() - timedelta(days=30)
-    log_files = glob.glob(os.path.join(LOG_DIR, '/kms/data/app.log.*'))
+    temp_file = os.path.join(LOG_DIR, 'app.log.temp')
 
-    for log_file in log_files:
-        file_stat = os.stat(log_file)
-        file_creation_time = datetime.fromtimestamp(file_stat.st_ctime)
-        if file_creation_time < cutoff_date:
-            os.remove(log_file)
-            print(f"Deleted log file: {log_file}")
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, 'r') as infile, open(temp_file, 'w') as outfile:
+            for line in infile:
+                log_timestamp = parse_log_timestamp(line)
+                if log_timestamp and log_timestamp >= cutoff_date:
+                    outfile.write(line)
+
+        # Replace the original log file with the filtered one
+        os.replace(temp_file, LOG_FILE)
+        print(f"{datetime.utcnow().isoformat()} - Old log entries removed from {LOG_FILE}")
+    else:
+        print(f"{datetime.utcnow().isoformat()} - Log file {LOG_FILE} does not exist.")
+
 
 if __name__ == "__main__":
     cleanup_logs()
