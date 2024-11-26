@@ -6,12 +6,16 @@ import os
 from datetime import datetime
 import secrets
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()  # Load environment variables from .env file
 
 from app.models import Base, APIKey
 from app.database import SessionLocal, engine
 from app.schemas import APIKeyCreate, APIKeyResponse
+
+# Configure logging
+logging.basicConfig(filename='/kms/data/app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -25,6 +29,26 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Middleware to log each request
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+
+    print(f"logging request: {request.url}")
+
+
+    api_key = request.headers.get("X-API-Key")
+    endpoint = request.url.path
+    method = request.method
+    ip_address = request.client.host
+    timestamp = datetime.utcnow().isoformat()
+
+    response = await call_next(request)
+
+    log_message = f"API Key: {api_key}, Endpoint: {endpoint}, Method: {method}, IP Address: {ip_address}, Timestamp: {timestamp}"
+    logging.info(log_message)
+
+    return response
 
 # Utility function to verify API key for creating keys
 async def check_create_auth(request: Request, db: Session = Depends(get_db)):

@@ -1,7 +1,12 @@
 services:
   key-management-service:
+    container_name: key-management-service
     build:
       context: .
     ports:
       - "8000:8000"
-    container_name: key-management-service
+    volumes:
+      - ./data:/kms/data
+
+volumes:
+  data:
